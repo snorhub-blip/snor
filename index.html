@@ -36,7 +36,6 @@ body{
     0 0 0 1px rgba(255,255,255,0.02) inset,
     0 24px 60px rgba(0,0,0,0.55),
     0 0 40px rgba(34,197,94,0.08);
-  backdrop-filter:blur(10px);
 }
 
 .logo{
@@ -59,7 +58,6 @@ body{
 h1{
   margin:0 0 8px;
   font-size:36px;
-  letter-spacing:0.4px;
 }
 
 .subtitle{
@@ -87,11 +85,7 @@ h1{
   border-radius:20px;
   background:linear-gradient(180deg, #0e0e0e 0%, #090909 100%);
   border:1px solid #1d1d1d;
-  min-height:138px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  min-height:150px;
 }
 
 .selected-version{
@@ -103,6 +97,14 @@ h1{
 .selected-version span{
   color:#22c55e;
   font-weight:bold;
+}
+
+.installer-panel{
+  display:none;
+}
+
+.installer-panel.active{
+  display:block;
 }
 
 .section-title{
@@ -130,8 +132,6 @@ h1{
   transition:0.25s;
   text-align:center;
   position:relative;
-  overflow:hidden;
-  user-select:none;
 }
 
 .version-card:hover{
@@ -190,21 +190,6 @@ h1{
   color:#6b7280;
 }
 
-.fade-in{
-  animation:fadeIn 0.18s ease;
-}
-
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(4px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
 @media (max-width:520px){
   .box{
     padding:22px;
@@ -230,31 +215,39 @@ h1{
 
   <div class="latest">Latest Version: v1.2.0</div>
 
-  <div class="install-wrap" id="installWrap">
+  <div class="install-wrap">
     <div class="selected-version">
       Selected Version: <span id="selectedText">v1.2.0</span>
     </div>
 
-    <div id="installerHolder" class="fade-in">
-      <esp-web-install-button id="installer" manifest="manifest_v1.2.0.json"></esp-web-install-button>
+    <div id="panel-1.2.0" class="installer-panel active">
+      <esp-web-install-button manifest="manifest_v1.2.0.json"></esp-web-install-button>
+    </div>
+
+    <div id="panel-1.1.0" class="installer-panel">
+      <esp-web-install-button manifest="manifest_v1.1.0.json"></esp-web-install-button>
+    </div>
+
+    <div id="panel-1.0.0" class="installer-panel">
+      <esp-web-install-button manifest="manifest_v1.0.0.json"></esp-web-install-button>
     </div>
   </div>
 
   <div class="section-title">Choose Version</div>
 
   <div class="version-grid">
-    <div class="version-card active" onclick="setVersion('manifest_v1.2.0.json','v1.2.0', this)">
+    <div class="version-card active" onclick="showVersion('1.2.0', this)">
       <div class="badge">LATEST</div>
       <div class="version-name">1.2.0</div>
       <div class="version-type">Stable Release</div>
     </div>
 
-    <div class="version-card" onclick="setVersion('manifest_v1.1.0.json','v1.1.0', this)">
+    <div class="version-card" onclick="showVersion('1.1.0', this)">
       <div class="version-name">1.1.0</div>
       <div class="version-type">Previous Build</div>
     </div>
 
-    <div class="version-card" onclick="setVersion('manifest_v1.0.0.json','v1.0.0', this)">
+    <div class="version-card" onclick="showVersion('1.0.0', this)">
       <div class="version-name">1.0.0</div>
       <div class="version-type">Legacy Build</div>
     </div>
@@ -270,30 +263,17 @@ h1{
 </div>
 
 <script>
-function createInstaller(manifest){
-  const holder = document.getElementById("installerHolder");
-  holder.innerHTML = "";
-
-  const newBtn = document.createElement("esp-web-install-button");
-  newBtn.setAttribute("id", "installer");
-  newBtn.setAttribute("manifest", manifest);
-
-  holder.appendChild(newBtn);
-
-  holder.classList.remove("fade-in");
-  void holder.offsetWidth;
-  holder.classList.add("fade-in");
-}
-
-function setVersion(manifest, version, element){
-  const selectedText = document.getElementById("selectedText");
+function showVersion(version, element){
+  const panels = document.querySelectorAll(".installer-panel");
   const cards = document.querySelectorAll(".version-card");
+  const selectedText = document.getElementById("selectedText");
 
-  selectedText.textContent = version;
+  panels.forEach(panel => panel.classList.remove("active"));
   cards.forEach(card => card.classList.remove("active"));
-  element.classList.add("active");
 
-  createInstaller(manifest);
+  document.getElementById("panel-" + version).classList.add("active");
+  element.classList.add("active");
+  selectedText.textContent = "v" + version;
 }
 </script>
 
