@@ -5,85 +5,260 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SNOR Installer</title>
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
-  background:#0b0b0b;
-  color:#fff;
-  font-family:Arial;
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
+  background:
+    radial-gradient(circle at top, #16301f 0%, #0b0b0b 35%, #050505 100%);
+  color:#fff;
+  font-family:Arial, sans-serif;
+  padding:20px;
 }
+
 .box{
-  width:420px;
+  width:460px;
+  max-width:100%;
   text-align:center;
   padding:30px;
-  border-radius:20px;
-  background:#111;
-  border:1px solid #2a2a2a;
+  border-radius:24px;
+  background:rgba(17,17,17,0.95);
+  border:1px solid rgba(34,197,94,0.22);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02) inset,
+    0 20px 50px rgba(0,0,0,0.55),
+    0 0 35px rgba(34,197,94,0.08);
+  backdrop-filter:blur(10px);
 }
+
+.logo{
+  width:72px;
+  height:72px;
+  margin:0 auto 14px;
+  border-radius:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  font-weight:bold;
+  color:#0b0b0b;
+  background:linear-gradient(135deg, #22c55e, #86efac);
+  box-shadow:
+    0 10px 30px rgba(34,197,94,0.25),
+    0 0 0 4px rgba(34,197,94,0.08);
+}
+
 h1{
-  font-size:32px;
-  margin-bottom:5px;
+  margin:0 0 8px;
+  font-size:34px;
+  letter-spacing:0.5px;
 }
+
+.subtitle{
+  margin:0;
+  color:#9ca3af;
+  font-size:14px;
+}
+
 .latest{
+  margin-top:18px;
+  margin-bottom:18px;
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  color:#22c55e;
+  background:rgba(34,197,94,0.10);
+  border:1px solid rgba(34,197,94,0.22);
+  font-weight:bold;
+}
+
+.install-wrap{
+  margin-top:8px;
+  margin-bottom:20px;
+  padding:18px;
+  border-radius:18px;
+  background:#0d0d0d;
+  border:1px solid #232323;
+}
+
+.selected-version{
+  margin-bottom:14px;
+  font-size:15px;
+  color:#d1d5db;
+}
+
+.selected-version span{
   color:#22c55e;
   font-weight:bold;
-  margin-bottom:15px;
 }
-button{
-  width:100%;
-  padding:15px;
-  margin-top:10px;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
+
+.section-title{
+  margin:22px 0 12px;
+  text-align:left;
+  font-size:13px;
+  color:#9ca3af;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.version-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+
+.version-card{
+  border:1px solid #2a2a2a;
+  background:linear-gradient(180deg, #151515 0%, #0f0f0f 100%);
+  color:#fff;
+  border-radius:18px;
+  padding:16px 10px;
   cursor:pointer;
+  transition:0.25s;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
 }
-.old{
-  background:#1b1b1b;
-  color:white;
-  border:1px solid #333;
+
+.version-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(34,197,94,0.45);
+  box-shadow:0 10px 24px rgba(0,0,0,0.35);
 }
-.arrow{
-  margin-top:15px;
-  cursor:pointer;
-  color:#22c55e;
+
+.version-card.active{
+  border-color:#22c55e;
+  background:linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.08) 100%);
+  box-shadow:
+    0 0 0 1px rgba(34,197,94,0.25) inset,
+    0 0 22px rgba(34,197,94,0.14);
 }
-.hidden{
-  display:none;
+
+.version-name{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.version-type{
+  font-size:12px;
+  color:#9ca3af;
+}
+
+.version-card.active .version-type{
+  color:#d1fae5;
+}
+
+.badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  font-size:10px;
+  font-weight:bold;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#22c55e;
+  color:#04110a;
+}
+
+.note{
+  margin-top:18px;
+  font-size:13px;
+  color:#9ca3af;
+  line-height:1.7;
+}
+
+.footer{
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid #202020;
+  font-size:12px;
+  color:#6b7280;
+}
+
+@media (max-width:520px){
+  .box{
+    padding:22px;
+  }
+
+  .version-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:28px;
+  }
 }
 </style>
 </head>
 <body>
+
 <div class="box">
-<h1>SNOR Installer</h1>
-<div class="latest">Latest Version: v1.2.0</div>
+  <div class="logo">S</div>
 
-<esp-web-install-button id="installer" manifest="manifest_v1.2.0.json"></esp-web-install-button>
+  <h1>SNOR Installer</h1>
+  <p class="subtitle">Wireless Security Analysis System</p>
 
-<div class="arrow" onclick="toggle()">▼ Previous Versions</div>
+  <div class="latest">Latest Version: v1.2.0</div>
 
-<div id="old" class="hidden">
-<button class="old" onclick="setVersion('manifest_v1.2.0.json')">Install v1.2.0</button>
-<button class="old" onclick="setVersion('manifest_v1.1.0.json')">Install v1.1.0</button>
-<button class="old" onclick="setVersion('manifest_v1.0.0.json')">Install v1.0.0</button>
-</div>
+  <div class="install-wrap">
+    <div class="selected-version">
+      Selected Version: <span id="selectedText">v1.2.0</span>
+    </div>
+
+    <esp-web-install-button id="installer" manifest="manifest_v1.2.0.json"></esp-web-install-button>
+  </div>
+
+  <div class="section-title">Choose Version</div>
+
+  <div class="version-grid">
+    <div class="version-card active" onclick="setVersion('manifest_v1.2.0.json','v1.2.0', this)">
+      <div class="badge">LATEST</div>
+      <div class="version-name">1.2.0</div>
+      <div class="version-type">Stable Release</div>
+    </div>
+
+    <div class="version-card" onclick="setVersion('manifest_v1.1.0.json','v1.1.0', this)">
+      <div class="version-name">1.1.0</div>
+      <div class="version-type">Previous Build</div>
+    </div>
+
+    <div class="version-card" onclick="setVersion('manifest_v1.0.0.json','v1.0.0', this)">
+      <div class="version-name">1.0.0</div>
+      <div class="version-type">Legacy Build</div>
+    </div>
+  </div>
+
+  <div class="note">
+    Select the version you want, then connect your device and start flashing directly from the browser.
+  </div>
+
+  <div class="footer">
+    SNOR Official Web Installer
+  </div>
 </div>
 
 <script>
-function toggle(){
-  const el = document.getElementById("old");
-  el.classList.toggle("hidden");
-}
-
-function setVersion(manifest){
+function setVersion(manifest, version, element){
   const btn = document.getElementById("installer");
+  const selectedText = document.getElementById("selectedText");
+  const cards = document.querySelectorAll(".version-card");
+
   btn.setAttribute("manifest", manifest);
-  alert("Selected version ready. Click Install.");
+  selectedText.textContent = version;
+
+  cards.forEach(card => card.classList.remove("active"));
+  element.classList.add("active");
 }
 </script>
+
 </body>
 </html>
