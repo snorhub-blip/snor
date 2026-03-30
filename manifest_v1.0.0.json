@@ -7,7 +7,7 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "../Flasher/snor_v1.0.0_full.bin",
+          "path": "./snor_v1.0.0_full.bin"
           "offset": 0
         }
       ]
