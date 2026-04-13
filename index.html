@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNOR Installer</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:
+    radial-gradient(circle at top, #16301f 0%, #0b0b0b 35%, #050505 100%);
+  color:#fff;
+  font-family:Arial, sans-serif;
+  padding:20px;
+}
+
+.box{
+  width:480px;
+  max-width:100%;
+  text-align:center;
+  padding:32px;
+  border-radius:26px;
+  background:rgba(10,10,10,0.96);
+  border:1px solid rgba(34,197,94,0.22);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02) inset,
+    0 24px 60px rgba(0,0,0,0.55),
+    0 0 40px rgba(34,197,94,0.08);
+}
+
+.logo{
+  width:76px;
+  height:76px;
+  margin:0 auto 16px;
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:32px;
+  font-weight:bold;
+  color:#04110a;
+  background:linear-gradient(135deg, #22c55e, #86efac);
+  box-shadow:
+    0 12px 30px rgba(34,197,94,0.25),
+    0 0 0 4px rgba(34,197,94,0.08);
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:36px;
+}
+
+.subtitle{
+  margin:0;
+  color:#9ca3af;
+  font-size:14px;
+}
+
+.latest{
+  margin-top:18px;
+  margin-bottom:18px;
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:999px;
+  color:#22c55e;
+  background:rgba(34,197,94,0.10);
+  border:1px solid rgba(34,197,94,0.22);
+  font-weight:bold;
+}
+
+.install-wrap{
+  margin-top:10px;
+  margin-bottom:20px;
+  padding:20px;
+  border-radius:20px;
+  background:linear-gradient(180deg, #0e0e0e 0%, #090909 100%);
+  border:1px solid #1d1d1d;
+  min-height:150px;
+}
+
+.selected-version{
+  margin-bottom:14px;
+  font-size:15px;
+  color:#d1d5db;
+}
+
+.selected-version span{
+  color:#22c55e;
+  font-weight:bold;
+}
+
+.installer-panel{
+  display:none;
+}
+
+.installer-panel.active{
+  display:block;
+}
+
+.section-title{
+  margin:22px 0 12px;
+  text-align:left;
+  font-size:13px;
+  color:#9ca3af;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.version-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+
+.version-card{
+  border:1px solid #272727;
+  background:linear-gradient(180deg, #141414 0%, #0d0d0d 100%);
+  color:#fff;
+  border-radius:18px;
+  padding:18px 10px;
+  cursor:pointer;
+  transition:0.25s;
+  text-align:center;
+  position:relative;
+}
+
+.version-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(34,197,94,0.45);
+  box-shadow:0 10px 24px rgba(0,0,0,0.35);
+}
+
+.version-card.active{
+  border-color:#22c55e;
+  background:linear-gradient(180deg, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.08) 100%);
+  box-shadow:
+    0 0 0 1px rgba(34,197,94,0.25) inset,
+    0 0 22px rgba(34,197,94,0.14);
+}
+
+.version-name{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.version-type{
+  font-size:12px;
+  color:#9ca3af;
+}
+
+.version-card.active .version-type{
+  color:#d1fae5;
+}
+
+.badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  font-size:10px;
+  font-weight:bold;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#22c55e;
+  color:#04110a;
+}
+
+.note{
+  margin-top:18px;
+  font-size:13px;
+  color:#9ca3af;
+  line-height:1.7;
+}
+
+.footer{
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid #202020;
+  font-size:12px;
+  color:#6b7280;
+}
+
+@media (max-width:520px){
+  .box{
+    padding:22px;
+  }
+
+  .version-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:29px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <div class="logo">S</div>
+
+  <h1>SNOR Installer</h1>
+  <p class="subtitle">Wireless Security Analysis System</p>
+
+  <div class="latest">Latest Version: v1.2.1</div>
+
+  <div class="install-wrap">
+    <div class="selected-version">
+      Selected Version: <span id="selectedText">v1.2.1</span>
+    </div>
+
+    <div id="panel-1.2.1" class="installer-panel active">
+      <esp-web-install-button manifest="manifest_v1.2.1.json"></esp-web-install-button>
+    </div>
+
+    <div id="panel-1.1.0" class="installer-panel">
+      <esp-web-install-button manifest="manifest_v1.1.0.json"></esp-web-install-button>
+    </div>
+
+    <div id="panel-1.0.0" class="installer-panel">
+      <esp-web-install-button manifest="manifest_v1.0.0.json"></esp-web-install-button>
+    </div>
+  </div>
+
+  <div class="section-title">Choose Version</div>
+
+  <div class="version-grid">
+    <div class="version-card active" onclick="showVersion('1.2.1', this)">
+      <div class="badge">LATEST</div>
+      <div class="version-name">1.2.1</div>
+      <div class="version-type">Stable Release</div>
+    </div>
+
+    <div class="version-card" onclick="showVersion('1.1.0', this)">
+      <div class="version-name">1.1.0</div>
+      <div class="version-type">Previous Build</div>
+    </div>
+
+    <div class="version-card" onclick="showVersion('1.0.0', this)">
+      <div class="version-name">1.0.0</div>
+      <div class="version-type">Legacy Build</div>
+    </div>
+  </div>
+
+  <div class="note">
+    Select the version you want, then connect your device and start flashing directly from the browser.
+  </div>
+
+  <div class="footer">
+    SNOR Official Web Installer
+  </div>
+</div>
+
+<script>
+function showVersion(version, element){
+  const panels = document.querySelectorAll(".installer-panel");
+  const cards = document.querySelectorAll(".version-card");
+  const selectedText = document.getElementById("selectedText");
+
+  panels.forEach(panel => panel.classList.remove("active"));
+  cards.forEach(card => card.classList.remove("active"));
+
+  document.getElementById("panel-" + version).classList.add("active");
+  element.classList.add("active");
+  selectedText.textContent = "v" + version;
+}
+</script>
+
+</body>
+</html>
